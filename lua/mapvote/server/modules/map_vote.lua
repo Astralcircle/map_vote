@@ -48,7 +48,7 @@ function MapVote.getMapList()
 end
 
 function MapVote.Start( length )
-    local allow = hook.Run( "MapVote_VoteStarted" )
+    local allow = hook.Run( "MapVote_CanStartVote" )
     if allow == false then return end
 
     length = length or MapVote.config.TimeLimit or 30
@@ -67,8 +67,6 @@ function MapVote.Start( length )
         end
     end
 
-    hook.Run( "MapVote_MapsSelected", mapsInVote )
-
     if #mapsInVote == 0 then
         ErrorNoHalt( "Vote aborted, there were zero maps in the vote" )
         return
@@ -80,6 +78,8 @@ function MapVote.Start( length )
     MapVote.state.currentMaps = mapsInVote
     MapVote.state.votes = {}
     MapVote.state.endTime = CurTime() + length
+
+    hook.Run( "MapVote_VoteStarted", MapVote.state )
 
     MapVote.Net.sendVoteStart( MapVote.state.endTime, mapsInVote )
 
