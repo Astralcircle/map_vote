@@ -43,7 +43,7 @@ function MapVote.StartVote( maps, endTime )
     frame.OnMinimizedChangeStart = function( self, v )
         if v then return end
         self.voteArea:SetVisible( true )
-        self.titleLabel:SetText( "Vote for a new map!" )
+        self.titleLabel:SetText( "Выберите новую карту!" )
 
         hook.Run( "MapVote_VotePanelOpened" )
     end
@@ -52,7 +52,7 @@ function MapVote.StartVote( maps, endTime )
     frame.OnMinimizedChangeFinish = function( self, v )
         if not v then return end
         self.voteArea:SetVisible( false )
-        self.titleLabel:SetText( "Vote for a new map! (F3 to vote)" )
+        self.titleLabel:SetText( "Выберите карту! (F3 — голосовать)" )
         self.titleLabel:SetWide( 700 )
 
         hook.Run( "MapVote_VotePanelClosed" )
@@ -64,7 +64,7 @@ function MapVote.StartVote( maps, endTime )
 
     local titleLabel = vgui.Create( "DLabel", infoRow ) --[[@as DLabel]]
     titleLabel:SetColor( MapVote.style.colorTextPrimary )
-    titleLabel:SetText( "Vote for a new map!" )
+    titleLabel:SetText( "Выберите новую карту!" )
     titleLabel:Dock( LEFT )
     titleLabel:SetWide( 500 )
     titleLabel:DockMargin( 10, 5, 5, 5 )

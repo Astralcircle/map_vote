@@ -9,22 +9,22 @@ local function updateconfigKey( key )
 end
 
 local configMenuOptions = {
-    { seperator = true,                                                          text = "Voting" },
-    { "The amount of maps in a vote",                                            schema.fields.MapLimit,                    "MapLimit" },
-    { "The length of a vote in seconds",                                         schema.fields.TimeLimit,                   "TimeLimit" },
-    { "Should the current map have a chance to appear in votes",                 schema.fields.AllowCurrentMap,             "AllowCurrentMap" },
-    { "Should the maps in a vote be sorted",                                     schema.fields.SortMaps,                    "SortMaps" },
+    { seperator = true,                                                          text = "Голосование" },
+    { "Количество карт в голосовании",                                            schema.fields.MapLimit,                    "MapLimit" },
+    { "Длительность голосования в секундах",                                         schema.fields.TimeLimit,                   "TimeLimit" },
+    { "Может ли текущая карта попасть в голосование",                 schema.fields.AllowCurrentMap,             "AllowCurrentMap" },
+    { "Сортировать ли карты в голосовании",                                     schema.fields.SortMaps,                    "SortMaps" },
     { seperator = true,                                                          text = "RTV" },
-    { "Percentage of players who need to RTV between 0 and 1",                   schema.fields.RTVPercentPlayersRequired,   "RTVPercentPlayersRequired" },
-    { "RTV Percentage when the map's MaxPlayers is exceeded",                    schema.fields.RTVPercentWhenOverpopulated, "RTVPercentWhenOverpopulated" },
-    { "The time RTV is disabled after a map change in seconds",                  schema.fields.RTVWait,                     "RTVWait" },
-    { "How long should a player wait between RTV commands",                      schema.fields.PlyRTVCooldownSeconds,       "PlyRTVCooldownSeconds" },
-    { "Minimum players required to enable RTVing",                               schema.fields.RTVPlayerCount,              "RTVPlayerCount" },
-    { seperator = true,                                                          text = "Maps" },
-    { "Map patterns, comma separated (e.g. `*` or `gm_*,de_*`)",                 schema.fields.MapPatterns,                 "MapPatterns" },
-    { "Use map prefixes from gamemode.txt",                                      schema.fields.UseGamemodeMapPrefixes,      "UseGamemodeMapPrefixes" },
-    { "Disable a map after its played",                                          schema.fields.EnableCooldown,              "EnableCooldown" },
-    { "The amount of maps that need to be played before a map is enabled again", schema.fields.MapsBeforeRevote,            "MapsBeforeRevote" },
+    { "Доля игроков, необходимая для RTV (от 0 до 1)",                   schema.fields.RTVPercentPlayersRequired,   "RTVPercentPlayersRequired" },
+    { "Доля игроков для RTV при превышении MaxPlayers карты",                    schema.fields.RTVPercentWhenOverpopulated, "RTVPercentWhenOverpopulated" },
+    { "Время блокировки RTV после смены карты (в секундах)",                  schema.fields.RTVWait,                     "RTVWait" },
+    { "Задержка между командами RTV у одного игрока (в секундах)",                      schema.fields.PlyRTVCooldownSeconds,       "PlyRTVCooldownSeconds" },
+    { "Минимум игроков для включения RTV",                               schema.fields.RTVPlayerCount,              "RTVPlayerCount" },
+    { seperator = true,                                                          text = "Карты" },
+    { "Шаблоны карт через запятую (напр. `*` или `gm_*,de_*`)",                 schema.fields.MapPatterns,                 "MapPatterns" },
+    { "Использовать префиксы карт из gamemode.txt",                                      schema.fields.UseGamemodeMapPrefixes,      "UseGamemodeMapPrefixes" },
+    { "Отключать карту после того, как она сыграна",                                          schema.fields.EnableCooldown,              "EnableCooldown" },
+    { "Сколько карт нужно сыграть, прежде чем карта снова станет доступной", schema.fields.MapsBeforeRevote,            "MapsBeforeRevote" },
 }
 
 MapVote._mapconfigFrame = nil
@@ -39,7 +39,7 @@ function MapVote.openconfig()
     frame:SetSize( 1000, ScrH() * 0.9 )
     frame:Center()
     frame:MakePopup()
-    frame:SetTitle( "MapVote Config" )
+    frame:SetTitle( "Настройки MapVote" )
 
     MapVote._configFrame = frame
     local configMenu = vgui.Create( "MapVote_ConfigPanel", frame ) --[[@as ConfigPanel]]
@@ -66,7 +66,7 @@ function MapVote.openconfig()
         end
 
         local buttonOpenMaps = vgui.Create( "DButton" ) --[[@as DButton]]
-        buttonOpenMaps:SetText( "Open Map config" )
+        buttonOpenMaps:SetText( "Открыть настройки карт" )
         buttonOpenMaps:Dock( LEFT )
         buttonOpenMaps:SetWide( 200 )
 
@@ -74,7 +74,7 @@ function MapVote.openconfig()
         buttonOpenMaps.DoClick = function( _ )
             MapVote.openMapconfig()
         end
-        configMenu:AddConfigPanel( "Edit map selection", buttonOpenMaps )
+        configMenu:AddConfigPanel( "Выбор карт", buttonOpenMaps )
     end )
 end
 
@@ -97,7 +97,7 @@ function MapVote.openMapconfig()
     local textEntry = vgui.Create( "MapVote_TextEntry", frame ) --[[@as DTextEntry]]
     textEntry:Dock( TOP )
     textEntry:DockMargin( 15, 5, 15, 5 )
-    textEntry:SetPlaceholderText( "Search for a map..." )
+    textEntry:SetPlaceholderText( "Поиск карты..." )
 
     local scrollPanel = vgui.Create( "MapVote_SearchableScrollPanel", frame ) --[[@as SearchableScrollPanel]]
     scrollPanel:Dock( FILL )

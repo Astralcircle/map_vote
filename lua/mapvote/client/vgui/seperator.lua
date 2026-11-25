@@ -3,6 +3,7 @@ local PANEL = {}
 
 surface.CreateFont( "MapVote_Seperator", {
     font = "Arial",
+    extended = true,
     size = 30,
     weight = 600,
     antialias = true,

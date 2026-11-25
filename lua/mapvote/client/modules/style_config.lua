@@ -26,7 +26,7 @@ MapVote.style = {
 -- fonts
 surface.CreateFont( "MapVote_ConfigNameLabel", {
     font = "Arial", --  Use the font-name which is shown to you by your operating system Font Viewer, not the file name
-    extended = false,
+    extended = true,
     size = 15,
     weight = 500,
     blursize = 0,
@@ -45,7 +45,7 @@ surface.CreateFont( "MapVote_ConfigNameLabel", {
 -- fonts
 surface.CreateFont( "MapVote_Title", {
     font = "Arial", --  Use the font-name which is shown to you by your operating system Font Viewer, not the file name
-    extended = false,
+    extended = true,
     size = 34,
     weight = 800,
     blursize = 0,

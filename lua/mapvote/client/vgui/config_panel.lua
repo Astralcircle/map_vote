@@ -41,6 +41,7 @@ end
 
 surface.CreateFont( "MapVote_ConfigItem", {
     font = "Arial",
+    extended = true,
     size = 20,
     weight = 600,
     antialias = true,

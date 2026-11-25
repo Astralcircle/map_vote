@@ -3,9 +3,9 @@ local PANEL = {}
 function PANEL:Init()
     self.state = 0
 
-    self.on = self:newStateButton( "Enable", 1 )
-    self.off = self:newStateButton( "Disable", -1 )
-    self.clear = self:newStateButton( "Clear", 0 )
+    self.on = self:newStateButton( "Включить", 1 )
+    self.off = self:newStateButton( "Отключить", -1 )
+    self.clear = self:newStateButton( "Сбросить", 0 )
 end
 
 ---@protected
