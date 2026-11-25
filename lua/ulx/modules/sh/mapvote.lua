@@ -8,7 +8,7 @@ end
 
 local rtv = ulx.command( "Utility", "rtv", ulx.rtv, "!rtv" )
 rtv:addParam( { type = ULib.cmds.BoolArg, invisible = true } )
-rtv:defaultAccess( ULib.ACCESS_ADMIN )
+rtv:defaultAccess( ULib.ACCESS_ALL )
 rtv:help( "Votes to change the map" )
 rtv:setOpposite( "unrtv", { nil, true }, "!unrtv" )
 
