@@ -126,20 +126,14 @@ function RTV.CanVote( ply )
         return false, "Подождите ещё " .. niceTime(conf.PlyRTVCooldownSeconds - CurTime()) .. ", прежде чем голосовать снова!"
     end
 
-    if GetGlobalBool( "In_Voting" ) then
-        return false, "Голосование уже идёт!"
-    end
-
     if ply.RTVVoted then
-        return false,
-            string.format( "Вы уже проголосовали за смену карты! (%s/%s)", RTV.GetVoteCount(),
-                RTV.GetThreshold() )
+        return false, string.format( "Вы уже проголосовали за смену карты! (%s/%s)", RTV.GetVoteCount(), RTV.GetThreshold() )
     end
 
     if MapVote.state.isInProgress then
-        return false,
-            "Голосование уже идёт"
+        return false, "Голосование уже идёт"
     end
+
     if RTV.GetPlayerCount() < conf.RTVPlayerCount then
         return false, "Для голосования за смену карты нужно больше игроков!"
     end
