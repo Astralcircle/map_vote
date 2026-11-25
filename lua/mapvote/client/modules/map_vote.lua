@@ -38,6 +38,7 @@ function MapVote.StartVote( maps, endTime )
     frame:SetKeyboardInputEnabled( false )
     frame:SetTitle( "" )
     frame:SetHideOnClose( true )
+    frame:DockPadding( 5, 24 + 5, 5, 5 )
 
     ---@diagnostic disable-next-line: duplicate-set-field
     frame.OnMinimizedChangeStart = function( self, v )
@@ -88,15 +89,16 @@ function MapVote.StartVote( maps, endTime )
         countdownLabel:SetText( string.FormattedTime( timeLeft or 0, "%02i:%02i" ) )
     end )
     local voteArea = vgui.Create( "MapVote_VoteArea", frame )
-    local margin = 10
+    local margin = 5
     voteArea:Dock( FILL )
     voteArea:DockMargin( margin, margin, margin, margin )
     voteArea:InvalidateLayout( true )
     voteArea:InvalidateParent( true )
     voteArea:SetMaps( maps )
 
-    frame:SetTall( voteArea:GetTotalRowHeight() + infoRow:GetTall() + margin * 3 + 20 )
-    frame:SetWide( voteArea:GetTotalRowWidth() + margin * 2 + 10 )
+    local pad_l, pad_t, pad_r, pad_b = frame:GetDockPadding()
+    frame:SetTall( pad_t + pad_b + infoRow:GetTall() + margin * 2 + voteArea:GetTotalRowHeight() )
+    frame:SetWide( pad_l + pad_r + margin * 2 + voteArea:GetTotalRowWidth() )
     voteArea:InvalidateLayout( true )
     frame:Center()
 

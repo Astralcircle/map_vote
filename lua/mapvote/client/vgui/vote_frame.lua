@@ -30,7 +30,7 @@ function PANEL:enableTopBar()
         b:SetVisible( true )
         b:SetHeight( 24 )
     end )
-    self:DockPadding( 5, 24 + 5, 5, 5 )
+    self:DockPadding( 3, 24 + 5, 5, 5 )
 end
 
 function PANEL:disableTopBar()
