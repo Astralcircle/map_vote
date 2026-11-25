@@ -12,6 +12,7 @@ local ThumbDownloader = MapVote.ThumbDownloader or {
     },
     noIcon = "maps/thumb/noicon.png",
     thumbFilePathCache = {},
+    materialCache = {},
 }
 
 
@@ -44,12 +45,21 @@ function ThumbDownloader:getMapThumbnailFilePath( name )
     return self.thumbFilePathCache[name]
 end
 
----@param map string
----@param callback fun( filepath: string )
-function ThumbDownloader:QueueDownload( map, callback )
+function ThumbDownloader:getFallbackMaterial( map )
     local filePath = self:getMapThumbnailFilePath( map )
     if filePath then
-        callback( filePath )
+        return Material( filePath )
+    end
+
+    return Material( self.noIcon )
+end
+
+---@param map string
+---@param callback fun( material: IMaterial )
+function ThumbDownloader:QueueDownload( map, callback )
+    local cached = self.materialCache[map]
+    if cached then
+        callback( cached )
         return
     end
 
@@ -82,7 +92,14 @@ function ThumbDownloader:DownloadAll()
 
     for _, mapData in pairs( self.mapsToDownload ) do
         local map = mapData.map
-        local callback = mapData.callback
+        local callback = function( material )
+            if not material then
+                material = self:getFallbackMaterial( map )
+            else
+                self.materialCache[map] = material
+            end
+            mapData.callback( material )
+        end
 
         local wsid = self.workshopIDLookup[map]
         if self.urlOverrides[map] then
@@ -90,22 +107,16 @@ function ThumbDownloader:DownloadAll()
         elseif wsid then
             self:DownloadThumbnailSteam( wsid, callback )
         else
-            callback( Material( self.noIcon ) )
+            callback( nil )
         end
     end
     self.mapsToDownload = {}
 end
 
 function ThumbDownloader:DownloadThumbnailSteam( wsid, callback )
-    local MAT_ERROR = Material( self.noIcon )
     steamworks.FileInfo( wsid, function( result )
-        if not result then
-            callback( MAT_ERROR )
-            return
-        end
-
-        if not result.previewid then
-            callback( MAT_ERROR )
+        if not result or not result.previewid then
+            callback( nil )
             return
         end
 
@@ -119,7 +130,7 @@ function ThumbDownloader:DownloadThumbnailSteam( wsid, callback )
         -- Download the preview image
         steamworks.Download( result.previewid, false, function( filePath )
             if not filePath then
-                callback( MAT_ERROR )
+                callback( nil )
                 return
             end
 
@@ -133,11 +144,12 @@ function ThumbDownloader:DownloadThumbnailURL( name, url, callback )
     local request = {
         failed = function( err )
             print( "MapVote: Failed to download map thumb", err )
-            callback( Material( self.noIcon ) )
+            callback( nil )
         end,
         success = function( code, body, headers )
             if code < 200 or code > 299 then
                 print( "MapVote: Failed to download map thumb, status code: ", code )
+                callback( nil )
                 return
             end
             local ext = ".png"
