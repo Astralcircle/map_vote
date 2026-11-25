@@ -1,37 +1,6 @@
 local RTV = MapVote.RTV or {}
 MapVote.RTV = RTV
 
--- Removes the ulx votemap command.
-hook.Add( "InitPostEntity", "RemoveULXVotemap", function()
-    if not ULib or not ulx then return end
-    for k, v in pairs( ulx.cmdsByCategory["Voting"] ) do
-        if v.cmd == "ulx votemap" then
-            ulx.cmdsByCategory["Voting"][k] = nil
-        end
-    end
-
-    ULib.removeSayCommand( "!votemap" )
-end )
-RTV.ChatCommandPrefixes = { "!", "/" }
-RTV.ChatCommands = {
-    ["rtv"] = function( ... ) RTV.HandleRTVCommand( ... ) end,
-    ["votemap"] = function( ... ) RTV.HandleRTVCommand( ... ) end,
-    ["mapvote"] = function( ... ) RTV.HandleRTVCommand( ... ) end,
-    ["unrtv"] = function( ... ) RTV.HandleUnRTVCommand( ... ) end,
-    ["unvotemap"] = function( ... ) RTV.HandleUnRTVCommand( ... ) end,
-    ["unmapvote"] = function( ... ) RTV.HandleUnRTVCommand( ... ) end,
-}
-
-function RTV.SetupChatCommands()
-    for _, prefix in ipairs( RTV.ChatCommandPrefixes ) do
-        for command, func in pairs( RTV.ChatCommands ) do
-            RTV.ChatCommands[prefix .. command] = func
-        end
-    end
-end
-
-RTV.SetupChatCommands()
-
 function RTV.ShouldCountPlayer( ply )
     local result = hook.Run( "MapVote_RTVShouldCountPlayer", ply )
     if result ~= nil then return result end
@@ -190,17 +159,6 @@ function RTV.StartVote( ply )
     RTV.AddVote( ply )
     RTV.StartIfShouldChange()
 end
-
-concommand.Add( "rtv_start", RTV.StartVote )
-
-hook.Add( "PlayerSay", "RTV Chat Commands", function( ply, text )
-    text = string.lower( text )
-
-    local f = RTV.ChatCommands[text]
-    if f then
-        f( ply )
-    end
-end )
 
 function RTV.HandleRTVCommand( ply )
     RTV.StartVote( ply )
