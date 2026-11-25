@@ -124,15 +124,41 @@ hook.Add( "PlayerDisconnected", "Remove RTV", function()
     timer.Simple( 0.1, RTV.StartIfShouldChange )
 end )
 
+local function plural( n, one, few, many )
+    local m10 = n % 10
+    local m100 = n % 100
+
+    if m10 == 1 and m100 ~= 11 then
+        return one
+    end
+
+    if m10 >= 2 and m10 <= 4 and ( m100 < 10 or m100 >= 20 ) then
+        return few
+    end
+
+    return many
+end
+
+local function niceTime( seconds )
+    seconds = math.max( math.ceil( seconds ), 1 )
+
+    if seconds >= 60 then
+        local minutes = math.ceil( seconds / 60 )
+        return minutes .. " " .. plural( minutes, "минуту", "минуты", "минут" )
+    end
+
+    return seconds .. " " .. plural( seconds, "секунду", "секунды", "секунд" )
+end
+
 function RTV.CanVote( ply )
     local conf = MapVote.GetConfig()
 
     if conf.RTVWait >= CurTime() then
-        return false, "Подождите ещё " .. conf.RTVWait - CurTime() .. " секунд, прежде чем голосовать за смену карты!"
+        return false, "Подождите ещё " .. niceTime(conf.RTVWait - CurTime()) .. ", прежде чем голосовать за смену карты!"
     end
 
     if ply.RTVVotedTime and ply.RTVVotedTime + conf.PlyRTVCooldownSeconds >= CurTime() then
-        return false, "Подождите ещё " .. conf.PlyRTVCooldownSeconds - CurTime() .. " секунд, прежде чем голосовать снова!"
+        return false, "Подождите ещё " .. niceTime(conf.PlyRTVCooldownSeconds - CurTime()) .. ", прежде чем голосовать снова!"
     end
 
     if GetGlobalBool( "In_Voting" ) then
