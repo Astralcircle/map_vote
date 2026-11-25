@@ -123,7 +123,7 @@ function RTV.CanVote( ply )
     end
 
     if ply.RTVVotedTime and ply.RTVVotedTime + conf.PlyRTVCooldownSeconds >= CurTime() then
-        return false, "Подождите ещё " .. niceTime(conf.PlyRTVCooldownSeconds - CurTime()) .. ", прежде чем голосовать снова!"
+        return false, "Подождите ещё " .. niceTime(ply.RTVVotedTime + conf.PlyRTVCooldownSeconds - CurTime()) .. ", прежде чем голосовать снова!"
     end
 
     if ply.RTVVoted then
