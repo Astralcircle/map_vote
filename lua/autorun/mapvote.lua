@@ -17,22 +17,16 @@ if SERVER then
         include( f )
     end )
 
-    -- load plugins before modules so they can add hooks
+    -- load modules
     runOnDir( "mapvote/server/modules", include )
-    runOnDir( "mapvote/server/plugins", include )
-
     -- add cs lua
     runOnDir( "mapvote/client/modules", AddCSLuaFile )
     runOnDir( "mapvote/client/vgui", AddCSLuaFile )
-    runOnDir( "mapvote/client/plugins", AddCSLuaFile )
 else
     -- load modules and vgui
     runOnDir( "mapvote/shared/modules", include )
     runOnDir( "mapvote/client/modules", include )
     runOnDir( "mapvote/client/vgui", include )
-
-    -- plugins
-    runOnDir( "mapvote/client/plugins", include )
 end
 
 hook.Run( "MapVote_Loaded" )
