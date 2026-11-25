@@ -52,7 +52,7 @@ function MapVote.StartVote( maps, endTime )
     frame.OnMinimizedChangeFinish = function( self, v )
         if not v then return end
         self.voteArea:SetVisible( false )
-        self.titleLabel:SetText( "Выберите карту! (F3 — голосовать)" )
+        self.titleLabel:SetText( "Голосуйте за следующую карту! (F3)" )
         self.titleLabel:SetWide( 700 )
 
         hook.Run( "MapVote_VotePanelClosed" )
@@ -76,7 +76,7 @@ function MapVote.StartVote( maps, endTime )
     countdownLabel:SetText( "00:45" )
     countdownLabel:Dock( RIGHT )
     countdownLabel:SetWide( 80 )
-    countdownLabel:DockMargin( 5, 5, 5, 10 )
+    countdownLabel:DockMargin( 5, 5, 5, 5 )
     countdownLabel:SetFont( MapVote.style.mapVoteTitleFont )
     timer.Create( "MapVoteCountdown", 0.1, 0, function()
         if not IsValid( countdownLabel ) then

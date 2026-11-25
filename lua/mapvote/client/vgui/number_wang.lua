@@ -6,6 +6,7 @@ function PANEL:Init()
     self.numberWang:SetCursorColor( MapVote.style.colorTextPrimary )
     self.numberWang:Dock( FILL )
     self.numberWang.m_bBackground = false
+    self.numberWang:SetFont( "DermaDefaultBold" )
 
     ---@diagnostic disable-next-line: duplicate-set-field
     self.numberWang.OnValueChanged = function( _, val )
@@ -14,7 +15,10 @@ function PANEL:Init()
 end
 
 function PANEL:Paint( w, h )
-    draw.RoundedBox( 2, 0, 0, w, h, MapVote.style.colorSecondaryBG )
+    surface.SetDrawColor( MapVote.style.colorPrimaryBG )
+    surface.DrawRect( 0, 0, w, h )
+    surface.SetDrawColor( 0, 0, 0, 255 )
+    surface.DrawOutlinedRect( 0, 0, w, h, 1 )
 end
 
 function PANEL:SetMin( val )

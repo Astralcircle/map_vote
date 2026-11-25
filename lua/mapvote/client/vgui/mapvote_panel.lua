@@ -235,9 +235,10 @@ local function CreateMultFont( size )
     end
 
     surface.CreateFont( name, {
-        font = "Arial",
+        font = "Tahoma",
+        extended = true,
         size = size,
-        weight = 600,
+        weight = 800,
         antialias = true,
         shadow = false
     } )

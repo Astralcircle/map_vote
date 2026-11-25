@@ -1,4 +1,4 @@
----@class SearchableScrollPanel : DScrollPanel
+---@class SearchableScrollPanel : CBScrollPanel
 local PANEL = {}
 function PANEL:Init()
     self.items = {}
@@ -49,4 +49,4 @@ function PANEL:Refresh()
     self:OnRefresh()
 end
 
-vgui.Register( "MapVote_SearchableScrollPanel", PANEL, "DScrollPanel" )
+vgui.Register( "MapVote_SearchableScrollPanel", PANEL, "CBScrollPanel" )

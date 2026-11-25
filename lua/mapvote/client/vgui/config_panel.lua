@@ -1,4 +1,4 @@
----@class ConfigPanel : DScrollPanel
+---@class ConfigPanel : CBScrollPanel
 local PANEL = {}
 
 function PANEL:Init()
@@ -17,12 +17,16 @@ end
 
 function PANEL:configRow( displayName )
     local w = self:GetWide()
-    local optionPanel = vgui.Create( "Panel", self ) --[[@as Panel]]
+    local optionPanel = vgui.Create( "CBPanel", self ) --[[@as Panel]]
+    optionPanel:SetHovering( true )
+    optionPanel:SetChildHover( true )
     optionPanel:SetSize( w, 35 )
     optionPanel:Dock( TOP )
+    optionPanel:DockMargin( 0, 0, 0, 2 )
 
-    local label = vgui.Create( "DLabel", optionPanel ) --[[@as DLabel]]
+    local label = vgui.Create( "CBLabel", optionPanel ) --[[@as DLabel]]
     label:SetText( displayName )
+    label:DockMargin( 5, 0, 0, 0 )
     label:Dock( LEFT )
     label:SetFont( "MapVote_ConfigItem" )
     label:SizeToContents()
@@ -40,19 +44,19 @@ function PANEL:PerformLayout()
 end
 
 surface.CreateFont( "MapVote_ConfigItem", {
-    font = "Arial",
+    font = "Tahoma",
     extended = true,
-    size = 20,
-    weight = 600,
+    size = 13,
+    weight = 800,
     antialias = true,
-    shadow = false
+    shadow = true
 } )
 
 function PANEL:AddSeperator( text )
     local seperator = vgui.Create( "MapVote_Seperator", self )
     seperator:SetText( text )
     seperator:Dock( TOP )
-    seperator:DockMargin( 5, 15, 5, 5 )
+    seperator:DockMargin( 5, 5, 5, 5 )
     self:AddItem( seperator )
 end
 
@@ -86,11 +90,9 @@ function PANEL:AddConfigItem( displayName, itemType, action, startingValue )
             end
         end
     elseif itemType.name == "bool" then
-        entryPanel = vgui.Create( "MapVote_Switch", optionPanel )
-        entryPanel:SetOn( startingValue or false )
-        entryPanel.ColorOff = MapVote.style.colorSecondaryFG
-        entryPanel.ColorOn = MapVote.style.colorGreen
-        entryPanel.ColorSwitch = MapVote.style.colorPrimaryBG
+        entryPanel = vgui.Create( "DCheckBox", optionPanel )
+        entryPanel:SetSize( 15, 15 )
+        entryPanel:SetValue( startingValue or false )
         ---@diagnostic disable-next-line: duplicate-set-field
         entryPanel.OnChange = function( _, val )
             local ok, err = itemType:Validate( val )
@@ -158,9 +160,13 @@ function PANEL:AddConfigItem( displayName, itemType, action, startingValue )
         error( "Unknown type " .. itemType.name )
     end
     entryPanel:Dock( LEFT )
-    entryPanel:DockMargin( 0, 5, 0, 5 )
+    if itemType.name == "bool" then
+        entryPanel:DockMargin( 0, 10, 0, 10 )
+    else
+        entryPanel:DockMargin( 0, 5, 0, 5 )
+    end
 
-    errLabel = vgui.Create( "DLabel", optionPanel ) --[[@as DLabel]]
+    errLabel = vgui.Create( "CBLabel", optionPanel ) --[[@as DLabel]]
     errLabel:SetText( "" )
     errLabel:Dock( LEFT )
     errLabel:SetSize( 500, 25 )
@@ -172,4 +178,4 @@ function PANEL:AddConfigItem( displayName, itemType, action, startingValue )
     self:AddItem( optionPanel )
 end
 
-vgui.Register( "MapVote_ConfigPanel", PANEL, "DScrollPanel" )
+vgui.Register( "MapVote_ConfigPanel", PANEL, "CBScrollPanel" )

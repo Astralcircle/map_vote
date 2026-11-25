@@ -26,7 +26,7 @@ local function apply( items, func )
 end
 
 function PANEL:enableTopBar()
-    apply( { self.btnClose, self.btnMaxim, self.btnMinim }, function( b )
+    apply( { self.btnClose }, function( b )
         b:SetVisible( true )
         b:SetHeight( 24 )
     end )
@@ -34,7 +34,7 @@ function PANEL:enableTopBar()
 end
 
 function PANEL:disableTopBar()
-    apply( { self.btnClose, self.btnMaxim, self.btnMinim }, function( b )
+    apply( { self.btnClose }, function( b )
         b:SetVisible( false )
         b:SetHeight( 0 )
     end )
@@ -65,7 +65,7 @@ function PANEL:SetMinimized( m )
         self:OnMinimizedChangeStart( m )
         self._isMinimized = true
         local targetSize = Vector( math.max( minMinimizedWidth, ScrW() * 0.4 ), minimizedHeight )
-        local targetPos = Vector( ScrW() / 2 - targetSize.x / 2, 20 )
+        local targetPos = Vector( ScrW() / 2 - targetSize.x / 2, ScrH() - minimizedHeight - 5 )
         local data = MapVote.DoPanelMove( self, targetPos, targetSize, 0.3, function()
             if not self._isMinimized then return end
             self:OnMinimizedChangeFinish( m )

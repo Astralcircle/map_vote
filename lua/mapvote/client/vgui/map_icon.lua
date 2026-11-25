@@ -11,12 +11,12 @@ local function iconFont( size )
     end
     local name = "MapVote_MapIcon" .. size
     surface.CreateFont( name, {
-        font = "Roboto",
+        font = "Tahoma",
+        extended = true,
         size = size,
-        weight = 600,
+        weight = 800,
         antialias = true,
         shadow = true,
-        outline = true,
     } )
     fontCreated[name] = true
     return name
@@ -120,6 +120,16 @@ end
 function PANEL:Paint( w, h )
     surface.SetDrawColor( MapVote.style.colorSecondaryFG )
     surface.DrawRect( 0, 0, w, h )
+end
+
+function PANEL:PaintOver( w, h )
+    if self.button:IsHovered() then
+        surface.SetDrawColor( 255, 255, 255, 20 )
+        surface.DrawRect( 0, 0, w, h )
+    end
+
+    surface.SetDrawColor( 0, 0, 0, 255 )
+    surface.DrawOutlinedRect( 0, 0, w, h, 1 )
 end
 
 function PANEL:SetMap( map )

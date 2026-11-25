@@ -21,7 +21,7 @@ local configMenuOptions = {
     { "Задержка между командами RTV у одного игрока (в секундах)",                      schema.fields.PlyRTVCooldownSeconds,       "PlyRTVCooldownSeconds" },
     { "Минимум игроков для включения RTV",                               schema.fields.RTVPlayerCount,              "RTVPlayerCount" },
     { seperator = true,                                                          text = "Карты" },
-    { "Шаблоны карт через запятую (напр. `*` или `gm_*,de_*`)",                 schema.fields.MapPatterns,                 "MapPatterns" },
+    { "Шаблоны карт через запятую (например * или gm_*, de_*)",                 schema.fields.MapPatterns,                 "MapPatterns" },
     { "Использовать префиксы карт из gamemode.txt",                                      schema.fields.UseGamemodeMapPrefixes,      "UseGamemodeMapPrefixes" },
     { "Отключать карту после того, как она сыграна",                                          schema.fields.EnableCooldown,              "EnableCooldown" },
     { "Сколько карт нужно сыграть, прежде чем карта снова станет доступной", schema.fields.MapsBeforeRevote,            "MapsBeforeRevote" },
@@ -36,7 +36,7 @@ function MapVote.openconfig()
         return
     end
     local frame = vgui.Create( "MapVote_Frame" ) --[[@as DFrame]]
-    frame:SetSize( 1000, ScrH() * 0.9 )
+    frame:SetSize( 800, ScrH() * 0.5 )
     frame:Center()
     frame:MakePopup()
     frame:SetTitle( "Настройки MapVote" )
@@ -45,7 +45,6 @@ function MapVote.openconfig()
     local configMenu = vgui.Create( "MapVote_ConfigPanel", frame ) --[[@as ConfigPanel]]
     configMenu:SetSize( 800, 600 )
     configMenu:Dock( FILL )
-    configMenu:DockMargin( 10, 10, 10, 10 )
 
     ---@diagnostic disable-next-line: duplicate-set-field
     frame.OnClose = function( _ )
@@ -65,14 +64,20 @@ function MapVote.openconfig()
             end
         end
 
-        local buttonOpenMaps = vgui.Create( "DButton" ) --[[@as DButton]]
+        local buttonOpenMaps = vgui.Create( "CBButton" )
+        buttonOpenMaps:SetRounding( true )
+        buttonOpenMaps:SetOutlining( true )
+        buttonOpenMaps:SetEnableShadow( true )
+        buttonOpenMaps:SetMainColor( MapVote.style.colorSecondaryBG )
+        buttonOpenMaps:SetSecondColor( MapVote.style.colorHovered )
         buttonOpenMaps:SetText( "Открыть настройки карт" )
         buttonOpenMaps:Dock( LEFT )
         buttonOpenMaps:SetWide( 200 )
 
-        ---@diagnostic disable-next-line: duplicate-set-field
-        buttonOpenMaps.DoClick = function( _ )
-            MapVote.openMapconfig()
+        buttonOpenMaps.OnMousePressed = function( _, key )
+            if key == MOUSE_LEFT then
+                MapVote.openMapconfig()
+            end
         end
         configMenu:AddConfigPanel( "Выбор карт", buttonOpenMaps )
     end )
@@ -84,6 +89,7 @@ function MapVote.openMapconfig()
     end
 
     local frame = vgui.Create( "MapVote_Frame" ) --[[@as DFrame]]
+    frame:SetTitle( "Настройки карт" )
     frame:SetSize( 800, 600 )
     frame:Center()
     frame:MakePopup()
@@ -96,13 +102,13 @@ function MapVote.openMapconfig()
     MapVote._mapconfigFrame = frame
     local textEntry = vgui.Create( "MapVote_TextEntry", frame ) --[[@as DTextEntry]]
     textEntry:Dock( TOP )
-    textEntry:DockMargin( 15, 5, 15, 5 )
+    textEntry:DockMargin( 0, 0, 0, 5 )
     textEntry:SetPlaceholderText( "Поиск карты..." )
 
     local scrollPanel = vgui.Create( "MapVote_SearchableScrollPanel", frame ) --[[@as SearchableScrollPanel]]
     scrollPanel:Dock( FILL )
     scrollPanel:BindToEntry( textEntry )
-    scrollPanel:DockMargin( 15, 5, 15, 5 )
+    scrollPanel:DockMargin( 0, 0, 0, 0 )
     function scrollPanel:OnRefresh()
         MapVote.ThumbDownloader:RequestWorkshopIDs()
     end
@@ -115,7 +121,9 @@ function MapVote.openMapconfig()
 end
 
 function MapVote.addMapRow( map )
-    local row = vgui.Create( "Panel" ) --[[@as Panel]]
+    local row = vgui.Create( "CBPanel" )
+    row:SetHovering( true )
+    row:SetChildHover( true )
     row:SetSize( 800, 128 )
 
     local mapIcon = vgui.Create( "MapVote_MapIcon", row )
@@ -160,6 +168,8 @@ function MapVote.addMapRow( map )
     infoPanel:SetSize( 200, row:GetTall() )
 
     local label = vgui.Create( "DLabel", infoPanel ) --[[@as DLabel]]
+    label:SetTextColor( color_white )
+    label:SetFont( "CBFont" )
     label:SetText( map )
     label:DockMargin( 5, 0, 0, 0 )
     label:SetSize( label:GetTextSize() )
@@ -167,7 +177,7 @@ function MapVote.addMapRow( map )
     infoPanel:Dock( LEFT )
 
     row:Dock( TOP )
-    row:DockMargin( 5, 5, 5, 5 )
+    row:DockMargin( 0, 0, 0, 2 )
 
     return row
 end

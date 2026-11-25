@@ -3,15 +3,16 @@ local PANEL = {}
 function PANEL:Init()
     self.state = 0
 
-    self.on = self:newStateButton( "Включить", 1 )
-    self.off = self:newStateButton( "Отключить", -1 )
+    self.on = self:newStateButton( "Включить", 1, MapVote.style.colorGreen )
+    self.off = self:newStateButton( "Отключить", -1, MapVote.style.colorRed )
     self.clear = self:newStateButton( "Сбросить", 0 )
 end
 
 ---@protected
-function PANEL:newStateButton( name, state )
+function PANEL:newStateButton( name, state, selectedColor )
     local button = vgui.Create( "DButton", self ) --[[@as DButton]]
     button:SetText( name )
+    button:SetFont( "CBFont" )
     button:SetTextColor( MapVote.style.colorTextPrimary )
     button:Dock( TOP )
     button:DockMargin( 1, 1, 1, 1 )
@@ -22,7 +23,7 @@ function PANEL:newStateButton( name, state )
     end
     button.Paint = function( _, w, h )
         if self.state ~= 0 and self.state == state then
-            draw.RoundedBox( 3, 0, 0, w, h, MapVote.style.colorSelected )
+            draw.RoundedBox( 3, 0, 0, w, h, selectedColor )
             return
         end
         draw.RoundedBox( 3, 0, 0, w, h, MapVote.style.colorSecondaryFG )
@@ -40,7 +41,7 @@ function PANEL:OnStateChange( _ )
 end
 
 function PANEL:GetButtonsHeight()
-    return self.on:GetTall() * 3 + 10
+    return self.on:GetTall() * 3 + 8
 end
 
 function PANEL:Paint( w, h )
