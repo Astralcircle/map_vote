@@ -111,13 +111,9 @@ function RTV.AddVote( ply )
     ply.RTVVoted = true
     ply.RTVVotedTime = CurTime()
 
-    timer.Simple( 0, function()
-        if not ply:IsValid() then return end
-        local threshold = RTV.GetThreshold()
-        MsgN( ply:Nick() .. " has voted to change the map. (" .. RTV.GetVoteCount() .. "/" .. threshold .. ")" )
-        PrintMessage( HUD_PRINTTALK,
-            ply:Nick() .. " проголосовал за смену карты (" .. RTV.GetVoteCount() .. "/" .. threshold .. ")" )
-    end )
+    local threshold = RTV.GetThreshold()
+    MsgN( ply:Nick() .. " has voted to change the map. (" .. RTV.GetVoteCount() .. "/" .. threshold .. ")" )
+    PrintMessage( HUD_PRINTTALK, ply:Nick() .. " проголосовал за смену карты (" .. RTV.GetVoteCount() .. "/" .. threshold .. ")" )
 end
 
 hook.Add( "PlayerDisconnected", "Remove RTV", function()
