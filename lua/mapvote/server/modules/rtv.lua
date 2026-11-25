@@ -97,7 +97,7 @@ end
 function RTV.Start()
     if hook.Run( "MapVote_RTVStart" ) == false then return end
 
-    PrintMessage( HUD_PRINTTALK, "The vote has been rocked, map vote imminent" )
+    PrintMessage( HUD_PRINTTALK, "Игроки проголосовали за смену карты, голосование скоро начнется" )
     MapVote.Start()
 end
 
@@ -116,7 +116,7 @@ function RTV.AddVote( ply )
         local threshold = RTV.GetThreshold()
         MsgN( ply:Nick() .. " has voted to change the map. (" .. RTV.GetVoteCount() .. "/" .. threshold .. ")" )
         PrintMessage( HUD_PRINTTALK,
-            ply:Nick() .. " has voted to change the map. (" .. RTV.GetVoteCount() .. "/" .. threshold .. ")" )
+            ply:Nick() .. " проголосовал за смену карты (" .. RTV.GetVoteCount() .. "/" .. threshold .. ")" )
     end )
 end
 
@@ -128,29 +128,29 @@ function RTV.CanVote( ply )
     local conf = MapVote.GetConfig()
 
     if conf.RTVWait >= CurTime() then
-        return false, "You must wait " .. string.NiceTime( conf.RTVWait - CurTime() ) .. " before voting for a new map!"
+        return false, "Подождите ещё " .. conf.RTVWait - CurTime() .. " секунд, прежде чем голосовать за смену карты!"
     end
 
     if ply.RTVVotedTime and ply.RTVVotedTime + conf.PlyRTVCooldownSeconds >= CurTime() then
-        return false, "You must wait " .. string.NiceTime( ply.RTVVotedTime + conf.PlyRTVCooldownSeconds - CurTime() ) .. " before voting again!"
+        return false, "Подождите ещё " .. conf.PlyRTVCooldownSeconds - CurTime() .. " секунд, прежде чем голосовать снова!"
     end
 
     if GetGlobalBool( "In_Voting" ) then
-        return false, "There is currently a vote in progress!"
+        return false, "Голосование уже идёт!"
     end
 
     if ply.RTVVoted then
         return false,
-            string.format( "You have already voted to change the map! (%s/%s)", RTV.GetVoteCount(),
+            string.format( "Вы уже проголосовали за смену карты! (%s/%s)", RTV.GetVoteCount(),
                 RTV.GetThreshold() )
     end
 
     if MapVote.state.isInProgress then
         return false,
-            "There is already a vote in progress"
+            "Голосование уже идёт"
     end
     if RTV.GetPlayerCount() < conf.RTVPlayerCount then
-        return false, "You need more players before you can mapvote!"
+        return false, "Для голосования за смену карты нужно больше игроков!"
     end
 
     return true
@@ -186,10 +186,10 @@ end
 
 function RTV.HandleUnRTVCommand( ply )
     if not ply.RTVVoted then
-        ply:PrintMessage( HUD_PRINTTALK, "You have not rocked the vote!" )
+        ply:PrintMessage( HUD_PRINTTALK, "Вы не голосовали за смену карты!" )
         return
     end
 
     ply.RTVVoted = false
-    ply:PrintMessage( HUD_PRINTTALK, "Your vote has been removed!" )
+    ply:PrintMessage( HUD_PRINTTALK, "Ваш голос отозван!" )
 end
